@@ -1,6 +1,10 @@
 ## IDE specific
-*/.idea/workspace.xml 
-*/.idea/tasks.xml
+# Android Studio
+*.iml
+.idea
+#.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
+.gradle
+build/
 
 # Logs
 logs
