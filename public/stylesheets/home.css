@@ -1,0 +1,17 @@
+#news-container {
+  margin-top: 50px;
+}
+.news-header {
+  margin-bottom: 3px;
+}
+.news-content {
+  white-space: normal;
+  width: 80%;
+}
+.news-entry {
+  margin-bottom: 20px;
+}
+.carousel img {
+  min-width: 100%;
+  max-width: none;
+}

@@ -1,0 +1,21 @@
+extends layout_plain
+
+block content
+    script(src='/javascripts/notes.js')
+    script(src='/javascripts/model/notesCtrl.js')
+    script(src='/javascripts/frameworks/pdf.js')
+    script(src='/javascripts/frameworks/bootstrap-notify.min.js')
+    #presentation-container.container(ng-controller="notesCtrl")
+        link(rel='stylesheet', href='/stylesheets/presentation.css')
+        link(rel='stylesheet', href='/stylesheets/notify.css')
+        h1 Presenter Notes
+        div
+            .row
+                .col-md-4.container
+                    button#fullscreen.form-control.btn.btn-primary(href='') Fullscreen
+        p#curPage
+            | Note Number {{currentPage}}
+        div#canvas-container
+            canvas#slide-display
+
+        input#currentPage(value="{{currentPage}}", type="hidden")

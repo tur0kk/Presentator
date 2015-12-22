@@ -1,0 +1,25 @@
+doctype html
+html(ng-app="App")
+  head
+    block head
+      block title
+        title #{title}
+      block meta
+        meta(name='description', content='Create presentations and edit them live.')
+      link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+      link(rel='stylesheet', href='/stylesheets/global.css')
+      script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+      script(src="https://cdn.socket.io/socket.io-1.3.5.js")
+      script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js")
+      script(src='/javascripts/frameworks/angular-file-upload.min.js')
+      script(src='/javascripts/frameworks/bootstrap.min.js')
+      script(src='/javascripts/global.js')
+      script(src='/javascripts/helperFunctions.js')
+      script(src='/javascripts/frameworks/jquery-sortable-min.js')
+      script(src='/javascripts/frameworks/pdf.js')
+      script(src='/javascripts/frameworks/pdf.worker.js')
+      script(src='/javascripts/frameworks/underscore-min.js')
+      script(src='/javascripts/frameworks/moment.min.js')
+      script(src='/javascripts/model/clientApp.js')
+  body
+    block content

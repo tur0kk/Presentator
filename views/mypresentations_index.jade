@@ -1,0 +1,119 @@
+extends layout
+
+block link
+        -var selected = 'MyPresentations';
+block content
+    #mypresentations-container.container(ng-controller="MyPresentationsCtrl")
+        link(rel='stylesheet', href='/stylesheets/mypresentations.css')
+        script(src="/javascripts/frameworks/es5-shim.min.js")
+        script(src="/javascripts/frameworks/es5-sham.min.js")
+        script(src='/javascripts/frameworks/console-sham.min.js')
+        script(src='/javascripts/model/mypresentationsCtrl.js')
+        script(src='/javascripts/mypresentations.js')
+        .row
+            .col-md-3#sidebar-container
+                .well
+                    ul.nav.nav-stacked.nav-pills#sidebar
+                        li(ng-repeat="topic in topics" ng-click="selectTopic(topic)" ng-class="currentSelectedTopic==topic ? 'active' : ''")
+                            a(href="" onclick="return false;") {{topic}}
+                                span.pull-right.glyphicon.glyphicon-remove(ng-click="deleteTopic(topic)")
+                            ul.nav.nav-stacked.nav-pills.presentations-list(ng-if="currentSelectedTopic==topic")
+                                li(ng-repeat="presentation in presentations" ng-click="selectPresentation(presentation)" ng-class="currentSelectedPresentation==presentation ? 'active' : ''")
+                                    a(href="" onclick="return false;") {{presentation}}
+                                        span.pull-right.glyphicon.glyphicon-remove(ng-click="deletePresentation(presentation)")
+                                +add('presentationModal', 'Presentation')
+                        +add('topicModal', 'Topic')
+
+            .col-md-9 <!-- Content goes here -->
+                    // TODO: modal drops
+                    h1 My Presentations
+
+                    div(ng-if="currentDisplayedTopic!='' && currentDisplayedPresentation!=''")
+                        h3 {{currentDisplayedTopic}} - {{currentDisplayedPresentation}}
+                        .row
+                            #presDropZone.col-md-4.container(ng-if="presentationSlides.length === 0" ng-controller="UploadCtrl" nv-file-drop="" uploader="uploader" filters="customFilter")
+                                #presentationDropZone.well.my-drop-zone(nv-file-over="" uploader="uploader" ng-mouseenter="setLastDropZone('#presentationDropZone')" ng-class="lastDropArea=='#presentationDropZone' && lastDropAreaError == true ? 'my-drop-zone-error' : 'my-drop-zone'") Drop Presentation
+                            .col-md-4(ng-if="presentationSlides.length !== 0")
+                            #notesDropZone.col-md-4.container(ng-if="presentationNotes.length === 0" ng-controller="UploadCtrlNotes" nv-file-drop="" uploader="uploader" filters="customFilter")
+                                #notesInnerDropZone.well.my-drop-zone(nv-file-over="" uploader="uploader" ng-mouseenter="setLastDropZone('#notesDropZone')" ng-class="lastDropArea=='#notesDropZone' && lastDropAreaError == true ? 'my-drop-zone-error' : 'my-drop-zone'") Drop Notes
+                            .col-md-4(ng-if="presentationNotes.length !== 0")
+
+                        .row.offset-bot
+                            .col-md-4
+                                button#startPresentation.form-control.btn.btn-success(ng-if="presentationSlides.length > 0" ng-click="startPresentation()" href="") Open Presentation Window
+                            .col-md-4
+                                button#startPresentation.form-control.btn.btn-success(ng-if="presentationSlides.length > 0" ng-click="showNotes()" href="") Open Presenter Notes Window
+                        .row
+                            .col-md-8
+                                p
+                                    h4 Notify Presenter:
+                                textarea#messageSource.form-control
+                        .row.offset-bot
+                            .col-md-4
+                                input#sendNotification.form-control.btn.btn-primary(ng-click="notification()" href="" type="submit" value="Send Notification")
+
+                    ol.draggableList#draggableSlideList()
+                        li.panel.panel-info(ng-repeat="slide in presentationSlides")
+                            div.panel-heading
+                                p
+                                    | &nbsp;
+                                    a.pull-right.glyphicon.glyphicon-remove.pointer(ng-click="deleteSlide(slide)")
+                                    a(href="{{slide.filePath}}" download="")
+                                        span.pull-right.glyphicon.glyphicon-save()
+                            div.panel-body(ng-init="makeReordable(slide)")
+                                canvas(ng-attr-id="slide{{slide.fileIndex}}" ng-init="showPDFPreview(slide)")
+                                canvas(ng-if="presentationNotes.length >= slide.fileIndex" ng-attr-id="note{{slide.fileIndex}}" ng-init="showNotesPreview(slide)")
+                                div.pull-right
+                                    .test(ng-controller="UploadCtrl" nv-file-drop="" uploader="uploader" filters="customFilter")
+                                        .replace-drop-zone.well.my-drop-zone(ng-attr-id="replaceZone{{slide.fileIndex}}" nv-file-over="" uploader="uploader" ng-mouseenter="" ng-class="lastDropArea=='#presentationDropZone' && lastDropAreaError == true ? 'my-drop-zone-error' : 'my-drop-zone'") Drop Replacement Slide
+                                    .test(ng-controller="UploadCtrlNotes" nv-file-drop="" uploader="uploader" filters="customFilter")
+                                        .replace-drop-zone.well.my-drop-zone(ng-attr-id="replaceNotesZone{{slide.fileIndex}}" nv-file-over="" uploader="uploader" ng-mouseenter="" ng-class="lastDropArea=='#presentationDropZone' && lastDropAreaError == true ? 'my-drop-zone-error' : 'my-drop-zone'") Drop Replacement Note
+
+                        #slideAddDropZone.place-middle(ng-if="presentationSlides.length > 0" ng-controller="UploadCtrl" nv-file-drop="" uploader="uploader" filters="customFilter")
+                            .replace-drop-zone.well.my-drop-zone(ng-attr-id="addSlideZone" nv-file-over="" uploader="uploader" ng-mouseenter="" ng-class="lastDropArea=='#presentationDropZone' && lastDropAreaError == true ? 'my-drop-zone-error' : 'my-drop-zone'") Drop Additional Slide
+
+
+        <!-- template for adding +add element -->
+        mixin add(targetId, name)
+            li
+                a(href="" onclick="return false;" data-toggle="modal" data-target="#"+"#{targetId}")
+                    span.glyphicon.glyphicon-plus #{name}
+
+        <!-- template for uploading dialog -->
+        mixin upload()
+            .input-group
+                span.input-group-btn
+                    span.btn.btn-primary.btn-file Browse&hellip;
+                        input(type='file' value="")
+                input.form-control(type='text' value="" required=true)
+
+
+        <!-- Modal for adding element -->
+        #topicModal.modal.fade(role="dialog")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type="button" data-dismiss="modal") &times;
+                        h4.modal-title Add Topic
+                    .modal-body
+                        form(role="form" style="display: block;")
+                            .form-group
+                                input.form-control(type="text" name="name" ng-model="newTopic" placeholder="Name" autofocus=true required=true)
+                    .modal-footer
+                        button.btn.btn-primary(type="button" ng-click="addTopic()" data-dismiss="modal") Add
+                        button.btn.btn-default(type="button" data-dismiss="modal") Close
+        #presentationModal.modal.fade(role="dialog")
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type="button" data-dismiss="modal") &times;
+                        h4.modal-title Add Presentation
+                    .modal-body
+                        form(role="form" style="display: block;")
+                            .form-group
+                                input.form-control(type="text" name="name" ng-model="newPresentation" placeholder="Name" autofocus=true required=true)
+                            //.form-group
+                                //+upload()
+                    .modal-footer
+                        button.btn.btn-primary(type="button" ng-click="addPresentation()" data-dismiss="modal" ) Add
+                        button.btn.btn-default(type="button" data-dismiss="modal") Close

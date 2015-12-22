@@ -1,0 +1,20 @@
+Jade files:
+// no need to access cookie-session directly here
+// user (server model) for server side jade generation: user.username
+// angularjs (client model) for client side model manipulation: {{variableOfController}}
+
+NodeJS files:
+// cookie-session: req.session
+// user (server model): req.user
+
+SocketIO:
+// cookie-session: socket.session
+// user (server model): socket.user
+
+// alerts
+just set    req.session.notice
+            req.session.success
+            req.session.error
+            res.locals.notice
+            res.locals.success
+            res.locals.error

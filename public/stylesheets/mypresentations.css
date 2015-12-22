@@ -1,0 +1,89 @@
+#sidebar-container {
+  margin-top: 15px;
+}
+#sidebar a:focus {
+  outline: 0px !important;
+  -webkit-appearance: none;
+  background-color: rgba(0,0,0,0);
+  color: #428bca;
+}
+.presentations-list {
+  list-style-type: none;
+  margin-left: 20px;
+}
+.presentations-list .active a,
+.presentations-list .active a:hover {
+  background-color: #51b1ff !important;
+}
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  opacity: 0;
+  background: #f00;
+  cursor: inherit;
+  display: block;
+}
+input[readonly] {
+  background-color: #fff !important;
+  cursor: text !important;
+}
+.my-drop-zone {
+  border: dotted 3px #d3d3d3;
+  text-align: center;
+}
+.nv-file-over {
+  border: dotted 3px #008000;
+}
+.my-drop-zone-error {
+  border: dotted 3px #f00;
+}
+.replace-drop-zone {
+  height: 70%;
+  width: 200px;
+}
+.place-middle {
+  margin-top: 50px;
+}
+.offset-bot {
+  margin-bottom: 1em;
+}
+.btn-login {
+  background-color: #59b2e0;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+  height: auto;
+  font-weight: normal;
+  padding: 14px 0;
+  text-transform: uppercase;
+  border-color: #59b2e6;
+}
+.btn-login:hover,
+.btn-login:focus {
+  color: #fff;
+  background-color: #53a3cd;
+  border-color: #53a3cd;
+}
+.panel-heading {
+  cursor: grab;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+.pointer {
+  cursor: pointer;
+}
+.placeholder {
+  width: 810px;
+  height: 100px;
+  border: 5px dashed #d9edf7;
+  border-radius: 10px;
+}

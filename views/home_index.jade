@@ -1,0 +1,63 @@
+extends layout
+
+mixin news(subject, topic, date, content)
+        .news-entry
+                h4.news-header #{subject} - #{topic} - #{date}
+                p.news-content #{content}
+
+
+block link
+        -var selected = 'Home';
+block content
+        link(rel='stylesheet', href='/stylesheets/home.css')
+        script(src="/javascripts/frameworks/holder.js")
+        #myCarousel.carousel.slide(data-ride="carousel")
+            // Indicators
+            ol.carousel-indicators
+                li.active(data-target="#myCarousel" data-slite-to="0")
+                li(data-target="#myCarousel" data-slite-to="1")
+                li(data-target="#myCarousel" data-slite-to="2")
+            // Wrapper for slides
+            .carousel-inner
+                .item.active
+                    img(data-src="holder.js/600x400/auto/#777:#7a7a7a/text:First slide" alt="First slide")
+                    .container
+                        .carousel-caption
+                            h1 Example Headline
+                            p Note: If you're viewing this page via a
+                            p file://  URL, the "next" and "previous" Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.
+                .item
+                    img(data-src="holder.js/600x400/auto/#666:#6a6a6a/text:Second slide" alt="Second slide")
+                    .container
+                        .carousel-caption
+                            h1 Another example headline
+                            p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            p
+                                a.btn.btn-lg.btn-primary(href="#" role="button") Learn more
+
+                .item
+                    img(data-src="holder.js/600x400/auto/#555:#5a5a5a/text:Third slide" alt="Third slide")
+                    .container
+                        .carousel-caption
+                            h1 One more for good measure.
+                            p Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            p
+                                a.btn.btn-lg.btn-primary(href="#" role="button") Browse Gallery
+            //a.left.carousel-control(href="#myCarousel" data-slide="prev")
+                span.glyphicon.glyphicon-chevron-left
+            //a.right.carousel-control(href="#myCarousel" data-slide="next")
+                span.glyphicon.glyphicon-chevron-right
+            a.left.carousel-control(href="#myCarousel" data-slide="prev" role="button")
+                span.glyphicon.glyphicon-chevron-left(aria-hidden="true")
+                span.sr-only Previous
+            a.right.carousel-control(href="#myCarousel" data-slide="next" role="button")
+                span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
+                span.sr-only Next
+        
+        div.container
+                h1 News
+                p
+                  |Find here the newest information about this server.
+
+                #news-container
+                        +news('Server', 'Website', '10.06.2015', 'Initial setup.')
